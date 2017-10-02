@@ -10,23 +10,18 @@ RUN set -ex \
 		libjpeg62-turbo-dev \
 		libpng12-dev \
 		libpq-dev \
-		libmcrypt-dev \
 	' \
 	&& apt-get update && apt-get install -y --no-install-recommends $buildDeps && rm -rf /var/lib/apt/lists/* \
 	&& docker-php-ext-configure gd \
 		--with-jpeg-dir=/usr \
 		--with-png-dir=/usr \
-	&& docker-php-ext-install -j "$(nproc)" gd mcrypt bcmath dba mbstring pdo pdo_mysql pdo_pgsql calendar zip exif mysqli \
+	&& docker-php-ext-install -j "$(nproc)" gd bcmath dba mbstring pdo pdo_mysql pdo_pgsql calendar zip exif mysqli \
 	&& apt-mark manual \
 		libjpeg62-turbo \
 		libpq5 \
 	&& apt-get purge -y --auto-remove $buildDeps
 
 # Install intl
-RUN apt-get update && apt-get install -y libicu-dev
-RUN pecl install intl
-RUN docker-php-ext-install intl
-
 RUN apt-get update \
 	&& apt-get install -y libicu-dev \
 	&& docker-php-ext-configure intl \
