@@ -98,10 +98,6 @@ RUN apt-get update \
 RUN docker-php-ext-configure pcntl \
     && docker-php-ext-install pcntl
 
-# Extensions soap
-RUN docker-php-ext-configure soap \
-    && docker-php-ext-install soap
-
 # Extensions shmop
 RUN docker-php-ext-configure shmop \
     && docker-php-ext-install shmop
