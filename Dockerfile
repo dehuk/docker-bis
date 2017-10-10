@@ -27,4 +27,14 @@ RUN apt-get update \
 	&& docker-php-ext-configure intl \
 	&& docker-php-ext-install intl
 
+# Extensions xml
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends libxml2-dev \
+    && docker-php-ext-configure xml \
+    && docker-php-ext-install -j$(nproc) xml
+
+# Extensions wddx
+RUN docker-php-ext-configure wddx --enable-libxml \
+    && docker-php-ext-install wddx
+
 RUN apt-get update && apt-get install -y mysql-client
