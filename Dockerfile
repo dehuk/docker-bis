@@ -30,6 +30,10 @@ RUN docker-php-ext-configure bcmath \
 RUN docker-php-ext-configure calendar \
     && docker-php-ext-install calendar
 
+# Extensions dba
+RUN docker-php-ext-configure dba \
+    && docker-php-ext-install dba
+
 # Extensions curl
 RUN apt-get update \
     && apt install -y curl libcurl3 libcurl3-dev \
@@ -93,6 +97,10 @@ RUN apt-get update \
 # Extensions pcntl
 RUN docker-php-ext-configure pcntl \
     && docker-php-ext-install pcntl
+
+# Extensions soap
+RUN docker-php-ext-configure soap \
+    && docker-php-ext-install soap
 
 # Extensions shmop
 RUN docker-php-ext-configure shmop \
