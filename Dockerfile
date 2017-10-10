@@ -11,111 +11,126 @@ RUN apt-get update && apt-get install -y \
         libjpeg62-turbo-dev \
         libmcrypt-dev \
         libpng12-dev \
-    && docker-php-ext-install -j$(nproc) iconv mcrypt \
+        libssl-dev \
+    && docker-php-ext-install iconv mcrypt \
     && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
-    && docker-php-ext-install -j$(nproc) gd
+    && docker-php-ext-install gd
 
 # Extensions bz2
 RUN apt-get update \
     && apt-get install -y libbz2-dev \
     && docker-php-ext-configure bz2 \
-    && docker-php-ext-install -j$(nproc) bz2
+    && docker-php-ext-install bz2
 
 # Extensions bcmath
 RUN docker-php-ext-configure bcmath \
-    && docker-php-ext-install -j$(nproc) bcmath
+    && docker-php-ext-install bcmath
 
 # Extensions calendar
 RUN docker-php-ext-configure calendar \
-    && docker-php-ext-install -j$(nproc) calendar
+    && docker-php-ext-install calendar
 
 # Extensions curl
 RUN apt-get update \
     && apt install -y curl libcurl3 libcurl3-dev \
     && docker-php-ext-configure curl \
-    && docker-php-ext-install -j$(nproc) curl
+    && docker-php-ext-install curl
 
 # Extensions exif
 RUN docker-php-ext-configure exif \
-    && docker-php-ext-install -j$(nproc) exif
+    && docker-php-ext-install exif
 
 # Extensions gettex
 RUN docker-php-ext-configure gettext \
-    && docker-php-ext-install -j$(nproc) gettext
+    && docker-php-ext-install gettext
 
 # Extensions gmp
 RUN apt-get update \
     && apt-get install -y libgmp-dev \
     && ln -s /usr/include/x86_64-linux-gnu/gmp.h /usr/include/gmp.h \
     && docker-php-ext-configure gmp \
-    && docker-php-ext-install -j$(nproc) gmp
+    && docker-php-ext-install gmp
 
 # Extensions imap
 RUN apt-get update \
     && apt-get install -y libc-client-dev libkrb5-dev \
     && docker-php-ext-configure imap --with-kerberos --with-imap-ssl \
-    && docker-php-ext-install -j$(nproc) imap
+    && docker-php-ext-install imap
 
 # Extensions ldap
 RUN apt-get update \
     && apt install -y libldap2-dev \
     && ln -s /usr/lib/x86_64-linux-gnu/libldap.so /usr/lib/libldap.so \
     && docker-php-ext-configure ldap --with-libdir=lib/x86_64-linux-gnu \
-    && docker-php-ext-install -j$(nproc) ldap
+    && docker-php-ext-install ldap
 
 # Extensions hash
-RUN docker-php-ext-configure hash \
-    && docker-php-ext-install -j$(nproc) hash
+RUN docker-php-ext-configure hash --with-mhash  \
+    && docker-php-ext-install hash
 
 # Extensions mbstring
 RUN docker-php-ext-configure mbstring \
-    && docker-php-ext-install -j$(nproc) mbstring
-
-# Extensions pdo
-RUN docker-php-ext-configure pdo \
-    && docker-php-ext-install -j$(nproc) pdo
-
-# Extensions pdo_mysql
-RUN docker-php-ext-configure pdo_mysql --with-pdo-mysql=mysqlnd \
-    && docker-php-ext-install -j$(nproc) pdo_mysql
+    && docker-php-ext-install mbstring
 
 # Extensions mysqli
 RUN docker-php-ext-configure mysqli --with-mysqli=mysqlnd \
-    && docker-php-ext-install -j$(nproc) mysqli
+    && docker-php-ext-install mysqli
+
+# Extensions pdo
+RUN docker-php-ext-configure pdo \
+    && docker-php-ext-install pdo
+
+# Extensions pdo_mysql
+RUN docker-php-ext-configure pdo_mysql --with-pdo-mysql=mysqlnd \
+    && docker-php-ext-install pdo_mysql
+
+# Extensions pspell
+RUN apt-get update \
+    && apt install -y libpspell-dev \
+    && docker-php-ext-configure pspell \
+    && docker-php-ext-install pspell
 
 # Extensions pcntl
 RUN docker-php-ext-configure pcntl \
-    && docker-php-ext-install -j$(nproc) pcntl
+    && docker-php-ext-install pcntl
+
+# Extensions shmop
+RUN docker-php-ext-configure shmop \
+    && docker-php-ext-install shmop
+
+# Extensions sockets
+RUN docker-php-ext-configure sockets \
+    && docker-php-ext-install sockets
 
 # Extensions sysvmsg
 RUN docker-php-ext-configure sysvmsg \
-    && docker-php-ext-install -j$(nproc) sysvmsg
+    && docker-php-ext-install sysvmsg
 
 # Extensions sysvsem
 RUN docker-php-ext-configure sysvsem \
-    && docker-php-ext-install -j$(nproc) sysvsem
+    && docker-php-ext-install sysvsem
 
 # Extensions sysvshm
 RUN docker-php-ext-configure sysvshm \
-    && docker-php-ext-install -j$(nproc) sysvshm
+    && docker-php-ext-install sysvshm
 
 # Extensions zip
 RUN apt-get update \
     && apt-get install -y --no-install-recommends zlib1g-dev \
     && rm -r /var/lib/apt/lists/* \
-    && docker-php-ext-install -j$(nproc) zip
+    && docker-php-ext-install zip
 
 # Extensions intl
 RUN apt-get update \
     && apt-get install -y --no-install-recommends libicu-dev \
     && docker-php-ext-configure intl \
-    && docker-php-ext-install -j$(nproc) intl
+    && docker-php-ext-install intl
 
 # Extensions xml
 RUN apt-get update \
-    && apt-get install -y --no-install-recommends libxml2-dev \
+    && apt-get install -y --no-install-recommends libxml2-dev libxslt1-dev \
     && docker-php-ext-configure xml \
-    && docker-php-ext-install -j$(nproc) xml
+    && docker-php-ext-install xml
 
 # Extensions wddx
 RUN docker-php-ext-configure wddx --enable-libxml \
@@ -125,7 +140,7 @@ RUN docker-php-ext-configure wddx --enable-libxml \
 RUN apt-get update \
     && apt-get install -y --no-install-recommends libxslt-dev \
     && docker-php-ext-configure xsl \
-    && docker-php-ext-install -j$(nproc) xsl
+    && docker-php-ext-install xsl
 
 RUN a2enmod rewrite
 
