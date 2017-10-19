@@ -12,9 +12,8 @@ RUN apt-get update && apt-get install -y \
         libmcrypt-dev \
         libpng12-dev \
         libssl-dev \
-        curl libcurl3 libcurl3-dev \
-    && docker-php-ext-install iconv mcrypt curl\
-    && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ --with-curl\
+    && docker-php-ext-install iconv mcrypt \
+    && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
     && docker-php-ext-install gd
 
 # Extensions bz2
@@ -30,6 +29,12 @@ RUN docker-php-ext-configure bcmath \
 # Extensions calendar
 RUN docker-php-ext-configure calendar \
     && docker-php-ext-install calendar
+
+# Extensions curl
+RUN apt-get update \
+    && apt install -y curl libcurl4-openssl-dev \
+    && docker-php-ext-configure curl \
+    && docker-php-ext-install curl
 
 # Extensions dba
 RUN docker-php-ext-configure dba \
